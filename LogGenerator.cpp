@@ -1,10 +1,10 @@
-# include <iostream>
-# include <fstream>
-# include <string>
-# include <random>
 #include <ctime>
+#include <fstream>
 #include <iomanip>
+#include <iostream>
+#include <random>
 #include <sstream>
+#include <string>
 
 using namespace std;
 
@@ -23,13 +23,12 @@ void random_log_generator(string* logLevels, string* modules, string* httpAction
 
 string timeToString(time_t timeValue) {
 
-    tm* timeInfo = localtime(&timeValue);
-    
+  tm *timeInfo = localtime(&timeValue);
 
-    ostringstream oss;
-    oss << put_time(timeInfo, "%Y-%m-%d %H:%M:%S");
-    
-    return oss.str();
+  ostringstream oss;
+  oss << put_time(timeInfo, "%Y-%m-%d %H:%M:%S");
+
+  return oss.str();
 }
 
 int main(int argc, char* argv[]) {
@@ -100,7 +99,7 @@ int main(int argc, char* argv[]) {
         cout << "machine." + string(argv[1]) + ".log" << endl;
     }
 
-    for (int i = 0 ; i < numberOfLine ; i++) {
+  for (int i = 0; i < numberOfLine; i++) {
 
         if (i == RareLine && string(argv[1]) == "7") {
             line = "[" + now +  "] " + randomLogFile[i % 4000] + PATTERN_RARE +  "\n"; 
@@ -118,14 +117,13 @@ int main(int argc, char* argv[]) {
             line = "[" + now +  "] " + randomLogFile[i % 4000] + messages[i % 19] +  "\n";
         }
 
-        MyFile << line;
+    MyFile << line;
 
-        if (i % 30 == 0) {
-            curTime++;
-            now = timeToString(curTime);
-        }
+    if (i % 30 == 0) {
+      curTime++;
+      now = timeToString(curTime);
     }
+  }
 
-    MyFile.close();
+  MyFile.close();
 }
-
