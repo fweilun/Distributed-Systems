@@ -7,12 +7,9 @@
 #include <sstream>
 
 using namespace std;
-string PATTERN_RARE = "FATAL_CORE_DUMP_CORRUPT_BUFFER_9999";
-string PATTERN_SOMEWHAT_FREQUENT = "DATABASE_TRANSACTION_TIMEOUT_WARN";
-string PATTERN_FREQUENT = "HTTP_REQUEST_GET_INDEX_SUCCESS_200";
-string PATTERN_REGEX_TARGET = "USER_SESSION_ERR_AUTH_CODE_[0-9]{4}";
 
-void random_log_generator(string* logLevels, string* modules, string* httpAction, string* apiPath, string* stateCode, string* IPadress, string* messages, string* randomLogFile) {
+
+void random_log_generator(string* logLevels, string* modules, string* httpAction, string* apiPath, string* stateCode, string* IPadress, string* randomLogFile) {
     for (int i = 0 ; i < 4000 ; i++) {
         randomLogFile[i] = "[" + logLevels[rand() % 6] + "] [" + 
         modules[rand() % 15] + "] " + 
@@ -20,9 +17,6 @@ void random_log_generator(string* logLevels, string* modules, string* httpAction
         apiPath[rand() % 6] + " " +
         stateCode[rand() % 11] + " " +
         IPadress[rand() % 4] + " - ";
-
-        
-
     }
 
 }
@@ -77,9 +71,10 @@ int main(int argc, char* argv[]) {
     
     string PATTERN_RARE = "FATAL_CORE_DUMP_CORRUPT_BUFFER_9999";
     string PATTERN_REGEX_TARGET = "USER_SESSION_ERR_AUTH_CODE_"; // + to_string(rand() % 9000 + 1000) +  "\n"
+    string PATTERN_SOMEWHAT_FREQUENT = "DATABASE_TRANSACTION_TIMEOUT_WARN";
     string PATTERN_FREQUENT = "HTTP_REQUEST_GET_INDEX_SUCCESS_200";
     string randomLogFile[4000];
-    random_log_generator(logLevels, modules, httpAction, apiPath, stateCode, IPadress, messages, randomLogFile);
+    random_log_generator(logLevels, modules, httpAction, apiPath, stateCode, IPadress, randomLogFile);
     int numberOfLine = 300000;
     
     /*
@@ -90,6 +85,8 @@ int main(int argc, char* argv[]) {
     
     int RareLine = 100014;
     int frequentRegex = 2000;
+    int offsetSomewhatFrequent = 54;
+    int SomewhatFrequent = 3000;
     int offsetRegex = 83;
     int frequent = 100;
     int offsetFrequent = 41;
@@ -107,6 +104,9 @@ int main(int argc, char* argv[]) {
 
         if (i == RareLine && string(argv[1]) == "7") {
             line = "[" + now +  "] " + randomLogFile[i % 4000] + PATTERN_RARE +  "\n"; 
+        }
+        else if (i % SomewhatFrequent == offsetSomewhatFrequent && (string(argv[1]) == "3" || string(argv[1]) == "8" || string(argv[1]) == "9")) {
+            line =  "[" + now +  "] " + randomLogFile[i % 4000] + PATTERN_SOMEWHAT_FREQUENT + "\n";
         }
         else if (i % frequentRegex == offsetRegex) {
             line =  "[" + now +  "] " + randomLogFile[i % 4000] + PATTERN_REGEX_TARGET + to_string(rand() % 9000 + 1000) + "\n"; 
