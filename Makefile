@@ -13,5 +13,8 @@ client: client.cpp machine.o
 machine: machine.cpp machine.hpp
 	$(CXX) $(CXXFLAGS) -c machine.hpp -o machine.o
 
+LogGenerator: LogGenerator.cpp LogGenerator.o
+	$(CXX) $(CXXFLAGS) -c LogGenerator.cpp LogGenerator.o -o client
+	
 clean:
 	rm -f $(BINS) $(OBJS)
