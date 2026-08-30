@@ -95,7 +95,6 @@ int main(int argc, char* argv[]) {
     if (!MyFile.is_open()) cout << "file open is failed" << endl;
     else {
         cout << "file is opened" << endl;
-        cout << "machine." + string(argv[1]) + ".log" << endl;
     }
 
   for (int i = 0; i < numberOfLine; i++) {
