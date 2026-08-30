@@ -60,7 +60,7 @@ int main(int _, char **argv) {
   while (server_remain) {
     read_fds = master;
 
-    if ((select_res = select(fdmax, &read_fds, NULL, NULL, &max_wait) < 0) <=
+    if ((select_res = select(fdmax, &read_fds, NULL, NULL, &max_wait)) <=
         0) {
       printf("select fails with ret %d: errno %d\n", select_res, errno);
       continue; // not sure what would happend
