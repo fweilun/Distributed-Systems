@@ -1,4 +1,6 @@
 client.dSYM/
 server.dSYM/
+UnitTest.dSYM/
+LogGenerator.dSYM/
 
 notes.md
