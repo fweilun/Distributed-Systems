@@ -4,3 +4,12 @@ UnitTest.dSYM/
 LogGenerator.dSYM/
 
 notes.md
+.vscode
+.DS_Store
+LogGenerator
+UnitTest
+client
+machine.o
+server
+*.pdf
+*.log
