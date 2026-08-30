@@ -17,6 +17,19 @@ struct Log_Query{
   string content;
 };
 
+void teardown() {
+  system("pkill -f ./server");
+  system("rm machine.*.log");
+  system("./cleanup.sh");
+}
+
+void envSetup() {
+  system("pkill -f ./server");
+  system("./cleanup.sh");
+  system("./deploy.sh");
+  sleep(1);
+}
+
 Log_Query receivedData(int socket_fd, int machine_id) {
   Log_Query result;
   result.machine_id = machine_id;
@@ -46,13 +59,15 @@ void worker_task(int machine_id, const string& query_pattern, vector<Log_Query>&
     send(sock, request.c_str(), request.size(), 0);
     results[machine_id] = receivedData(sock, machine_id);
     } else {
-        perror(("Connect to port " + to_string(8080 + machine_id) + " failed").c_str());
+        perror(("Connect to port " + to_string(8081 + machine_id) + " failed").c_str());
     }
 
     close(sock);
 }
 
 int main() {
+  envSetup();
+  
   int NUM_OF_MACHINE = 10;
   string PATTERN[4] = {"FATAL_CORE_DUMP_CORRUPT_BUFFER_9999",
                        "USER_SESSION_ERR_AUTH_CODE_[0-9]{4}",
@@ -62,9 +77,7 @@ int main() {
       "1\n", "0\n", "150\n", "100\n",
       "3000\n"}; // 1 for machine 7 used for rare pattern test only appear on one
              // machine, 0 for other machine with rare pattern
-  
-  // clean up all previous data
-  system("./cleanup.sh");
+
 
   // generate log file for local version
   for (int i = 0; i < NUM_OF_MACHINE; i++) {
@@ -75,15 +88,16 @@ int main() {
       cout << "file" << to_string(i) << " is generated." << endl;
   }
 
-  system("./deploy.sh");
 
   vector<Log_Query> results(10);
   vector<thread> threads;
 
-  sleep(1);
+
+  
 
   // test1: test for rare patterns
   for (int num  = 0 ; num < 4 ; num++) {
+    threads.clear();
 
     for (int i =  0 ; i < NUM_OF_MACHINE ; i++) {
       string command;
@@ -136,4 +150,8 @@ int main() {
       cout <<  "Test " << num + 1 << " is not passed." << endl;
     }
   }
+
+  teardown();
+
 }
+
