@@ -12,6 +12,9 @@
 
 using namespace std;
 
+
+ int NUM_OF_MACHINE = 10;
+
 struct Log_Query{
   int machine_id = -1;
   string content;
@@ -26,6 +29,14 @@ void teardown() {
 void envSetup() {
   system("pkill -f ./server");
   system("./cleanup.sh");
+  // generate log file for local version
+  for (int i = 0; i < NUM_OF_MACHINE; i++) {
+    string path = "./run_test/LogGenerator " + to_string(i);
+    const char *command = path.c_str();
+    int result = system(command);
+    if (result == 0)
+      cout << "file" << to_string(i) << " is generated." << endl;
+  }
   system("./deploy.sh");
   sleep(1);
 }
@@ -68,7 +79,6 @@ void worker_task(int machine_id, const string& query_pattern, vector<Log_Query>&
 int main() {
   envSetup();
   
-  int NUM_OF_MACHINE = 10;
   string PATTERN[4] = {"FATAL_CORE_DUMP_CORRUPT_BUFFER_9999",
                        "USER_SESSION_ERR_AUTH_CODE_[0-9]{4}",
                        "DATABASE_TRANSACTION_TIMEOUT_WARN",
@@ -79,14 +89,7 @@ int main() {
              // machine, 0 for other machine with rare pattern
 
 
-  // generate log file for local version
-  for (int i = 0; i < NUM_OF_MACHINE; i++) {
-    string path = "./LogGenerator " + to_string(i);
-    const char *command = path.c_str();
-    int result = system(command);
-    if (result == 0)
-      cout << "file" << to_string(i) << " is generated." << endl;
-  }
+  
 
 
   vector<Log_Query> results(10);
