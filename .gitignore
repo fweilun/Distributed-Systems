@@ -1,15 +1,7 @@
-client.dSYM/
-server.dSYM/
-UnitTest.dSYM/
-LogGenerator.dSYM/
+bins/
 
 notes.md
 .vscode
 .DS_Store
-LogGenerator
-UnitTest
-client
-machine.o
-server
 *.pdf
 *.log

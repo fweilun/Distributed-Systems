@@ -1,4 +1,4 @@
 for id in {0..9}
 do
-    ./server $id &
+    ./bins/server $id &
 done

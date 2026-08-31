@@ -1,20 +1,22 @@
-#include "machine.hpp"
 #include <arpa/inet.h>
-#include <cstring>
 #include <fcntl.h>
-#include <iostream>
 #include <netdb.h>
 #include <netinet/in.h>
-#include <string>
 #include <sys/socket.h>
 #include <unistd.h>
 
+#include <cstring>
+#include <iostream>
+#include <string>
+
+#include "machine.hpp"
+
 #define PORT 8080
 
-int main(int _, char **argv) {
+int main(int _, char** argv) {
   int listener, server_remain = 0, select_res;
   struct addrinfo hints;
-  struct addrinfo *res;
+  struct addrinfo* res;
   struct timeval max_wait = {1, 0};
 
   int recv_size, fdmax;
@@ -33,7 +35,7 @@ int main(int _, char **argv) {
   hints.ai_family = AF_UNSPEC;
   hints.ai_socktype = SOCK_STREAM;
 
-  for (auto &cfg : machine_cfgs) {
+  for (auto& cfg : machine_cfgs) {
     if (getaddrinfo(cfg.ip.c_str(), cfg.port.c_str(), &hints, &res) != 0) {
       printf("getaddrinfo fails: %d\n", errno);
     }
@@ -52,7 +54,7 @@ int main(int _, char **argv) {
       fcntl(listener, F_SETFL, flags | O_NONBLOCK);
       shutdown(listener, SHUT_WR);
       FD_SET(listener, &master);
-      fdmax = std::max(fdmax, listener + 1); // max() not necessary
+      fdmax = std::max(fdmax, listener + 1);  // max() not necessary
       ++server_remain;
     }
   }
@@ -60,20 +62,17 @@ int main(int _, char **argv) {
   while (server_remain) {
     read_fds = master;
 
-    if ((select_res = select(fdmax, &read_fds, NULL, NULL, &max_wait)) <=
-        0) {
+    if ((select_res = select(fdmax, &read_fds, NULL, NULL, &max_wait)) <= 0) {
       printf("select fails with ret %d: errno %d\n", select_res, errno);
-      continue; // not sure what would happend
+      continue;  // not sure what would happend
     }
 
     for (int i = 0; i < fdmax; ++i) {
-      if (!FD_ISSET(i, &read_fds))
-        continue;
+      if (!FD_ISSET(i, &read_fds)) continue;
 
       char buffer[66536];
       if ((recv_size = recv(i, buffer, sizeof(buffer), 0)) < 0) {
-        if (errno != EAGAIN)
-          printf("recv fails: %d\n", errno);
+        if (errno != EAGAIN) printf("recv fails: %d\n", errno);
 
       } else {
         if (recv_size)

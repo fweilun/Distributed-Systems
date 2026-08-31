@@ -1,28 +1,38 @@
-.PHONY: test all clean
-CXX = g++
-CXXFLAGS = -Wall -Wextra -g -std=c++17  -pthread
-BINS = server client run_test/LogGenerator run_test/UnitTest
+.PHONY: all test clean
+
+CXX      = g++
+CXXFLAGS = -Wall -Wextra -g -std=c++17 -pthread
+
+TESTDIR = test
+BINDIR  = bins
+LOGDIR  = logs
+
+BINS = $(BINDIR)/server $(BINDIR)/client \
+       $(BINDIR)/LogGenerator $(BINDIR)/UnitTest
 OBJS = machine.o
-all: $(BINS) 
 
+all: $(BINS)
 
-server: server.cpp machine.o
-	$(CXX) $(CXXFLAGS) server.cpp machine.o -o server
+$(BINDIR) $(LOGDIR):
+	mkdir -p $@
 
-client: client.cpp machine.o
-	$(CXX) $(CXXFLAGS) client.cpp machine.o -o client
-	
-machine: machine.cpp machine.hpp
-	$(CXX) $(CXXFLAGS) -c machine.cpp -o machine.o
+machine.o: machine.cpp machine.hpp
+	$(CXX) $(CXXFLAGS) -c machine.cpp -o $@
 
-LogGenerator: run_test/LogGenerator.cpp 
-	$(CXX) $(CXXFLAGS) run_test/LogGenerator.cpp -o run_test/LogGenerator
+$(BINDIR)/server: server.cpp machine.hpp machine.o | $(BINDIR)
+	$(CXX) $(CXXFLAGS) server.cpp machine.o -o $@
 
-UnitTest: run_test/UnitTest.cpp 
-	$(CXX) $(CXXFLAGS) run_test/UnitTest.cpp -o run_test/UnitTest
+$(BINDIR)/client: client.cpp machine.hpp machine.o | $(BINDIR)
+	$(CXX) $(CXXFLAGS) client.cpp machine.o -o $@
 
-test: $(BINS)
-	./run_test/UnitTest
-	
+$(BINDIR)/LogGenerator: $(TESTDIR)/LogGenerator.cpp | $(BINDIR)
+	$(CXX) $(CXXFLAGS) $< -o $@
+
+$(BINDIR)/UnitTest: $(TESTDIR)/UnitTest.cpp | $(BINDIR)
+	$(CXX) $(CXXFLAGS) $< -o $@
+
+test: $(BINS) | $(LOGDIR)
+	./$(BINDIR)/UnitTest
+
 clean:
-	rm -f $(BINS) $(OBJS)
+	rm -rf $(BINDIR) $(LOGDIR) $(OBJS)
