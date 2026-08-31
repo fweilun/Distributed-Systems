@@ -28,7 +28,7 @@ int main(int _, char** argv) {
   printf("machine count: %zu\n", machine_cfgs.size());
 
   std::string command;
-  std::cin >> command;
+  getline(std::cin, command);
   int com_size = command.size();
 
   memset(&hints, 0, sizeof(hints));

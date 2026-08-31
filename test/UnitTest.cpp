@@ -22,7 +22,7 @@ struct Log_Query {
 
 void teardown() {
   system("pkill -f ./server");
-  system("rm machine.*.log");
+  system("rm -rf logs");
   system("./cleanup.sh");
 }
 
@@ -92,11 +92,11 @@ int main() {
     for (int i = 0; i < NUM_OF_MACHINE; i++) {
       string command;
       if (num == 1)
-        command = "grep -c -E \"" + PATTERN[num] + "\" ./machine." + to_string(i) + ".log";
+        command = "grep -c -E \"" + PATTERN[num] + "\" ./logs/machine." + to_string(i) + ".log";
       else if (num == 4)
-        command = "grep \"20\" ./machine." + to_string(i) + ".log";
+        command = "grep \"20\" ./logs/machine." + to_string(i) + ".log";
       else
-        command = "grep -c \"" + PATTERN[num] + "\" ./machine." + to_string(i) + ".log";
+        command = "grep -c \"" + PATTERN[num] + "\" ./logs/machine." + to_string(i) + ".log";
       threads.emplace_back(worker_task, i, command, ref(results));
     }
 
