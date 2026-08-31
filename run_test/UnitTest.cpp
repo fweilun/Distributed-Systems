@@ -44,7 +44,7 @@ void envSetup() {
 Log_Query receivedData(int socket_fd, int machine_id) {
   Log_Query result;
   result.machine_id = machine_id;
-  char buffer[5000];
+  char buffer[66536];
   ssize_t bytes_read;
 
   while((bytes_read = recv(socket_fd, buffer, sizeof(buffer), 0)) > 0)  {
@@ -99,12 +99,13 @@ int main() {
   
 
   // test1: test for rare patterns
-  for (int num  = 0 ; num < 4 ; num++) {
+  for (int num  = 0 ; num < 5 ; num++) {
     threads.clear();
 
     for (int i =  0 ; i < NUM_OF_MACHINE ; i++) {
       string command;
       if (num == 1) command = "grep -c -E \""+ PATTERN[num] +"\" ./machine." + to_string(i) + ".log";
+      else if (num == 4) command = "grep \"20\" ./machine." + to_string(i) + ".log";
       else command = "grep -c \""+ PATTERN[num] +"\" ./machine." + to_string(i) + ".log";
       threads.emplace_back(worker_task, i, command, ref(results));
     }
@@ -144,6 +145,9 @@ int main() {
           break;
         }
       }
+      else if (num == 4) {
+        cout << "-----------------Below are outputs of machine " << res.machine_id << "----------------------" << res.content << endl;
+      }
     }
 
     if (is_passed) {
@@ -153,6 +157,8 @@ int main() {
       cout <<  "Test " << num + 1 << " is not passed." << endl;
     }
   }
+
+
 
   teardown();
 
