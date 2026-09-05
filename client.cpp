@@ -13,14 +13,14 @@
 
 #define PORT 8080
 
-int main(int _, char** argv) {
+int main() {
   int listener, server_remain = 0, select_res;
   struct addrinfo hints;
   struct addrinfo* res;
   struct timeval max_wait = {1, 0};
 
   int recv_size, fdmax;
-  struct fd_set master, read_fds;
+  fd_set master, read_fds;
   FD_ZERO(&read_fds);
   FD_ZERO(&master);
 

@@ -15,8 +15,17 @@
 #define BACKLOG 20
 
 // The users assign a single machine id to this program.
-int main(int _, char** argv) {
-  int machine_id = atoi(argv[1]);
+int main(int argc, char** argv) {
+  int machine_id;
+  std::string machine_path = LOCAL_MACHINES_PATH;
+  for (int i = 0; i < argc; ++i) {
+    if (strcmp(argv[i], "-i")) {
+      machine_id = atoi(argv[i + 1]);
+    } else if (strcmp(argv[i], "--remote")) {
+      machine_path = REMOTE_MACHINES_PATH;
+    }
+  }
+
   // machine_config: returns the id, ip, port for each machine_id
   struct machine_config cfg = read_machine_config(machine_id);
 

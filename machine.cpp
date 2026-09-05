@@ -28,5 +28,5 @@ vector<machine_config> read_all_machine_config() {
 
 machine_config read_machine_config(int id) {
   vector<machine_config> configs = read_all_machine_config();
-  return configs[id];
+  return configs[id - 1];
 }

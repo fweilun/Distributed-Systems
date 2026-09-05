@@ -1,0 +1,10 @@
+1 fa26-cs425-4201.cs.illinois.edu 8080
+2 fa26-cs425-4202.cs.illinois.edu 8080
+3 fa26-cs425-4203.cs.illinois.edu 8080
+4 fa26-cs425-4204.cs.illinois.edu 8080
+5 fa26-cs425-4205.cs.illinois.edu 8080
+6 fa26-cs425-4206.cs.illinois.edu 8080
+7 fa26-cs425-4207.cs.illinois.edu 8080
+8 fa26-cs425-4208.cs.illinois.edu 8080
+9 fa26-cs425-4209.cs.illinois.edu 8080
+10 fa26-cs425-4210.cs.illinois.edu 8080
