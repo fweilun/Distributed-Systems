@@ -25,7 +25,6 @@ vector<machine_config> read_all_machine_config(const string& path) {
     cfg.ip = ip;
     cfg.port = port;
     machine_list.emplace_back(cfg);
-    return machine_list;
   }
   return machine_list;
 }
