@@ -41,7 +41,7 @@ stop() {
     $SSH cs425-$h "pkill -f 'bins/server' || true"
     echo "[stop] $h"
   done
-}e
+}
 
 case "${1:-}" in
   deploy)  deploy ;;
