@@ -15,7 +15,7 @@
 
 int main(int argc, char** argv) {
   std::string machine_path = REMOTE_MACHINES_PATH;
-  for (int i = 0; i < argc; ++i) {
+  for (int i = 1; i < argc; ++i) {
     if (strcmp(argv[i], "--local") == 0) {
       machine_path = LOCAL_MACHINES_PATH;
     } else {
