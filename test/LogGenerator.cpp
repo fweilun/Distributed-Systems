@@ -90,11 +90,12 @@ int main(int argc, char* argv[]) {
   time_t curTime = 1000000000;
   string now = timeToString(curTime);
   string line;
-  ofstream MyFile("logs/machine." + string(argv[1]) + ".log");
+  string filename = "./logs/machine." + string(argv[1]) + ".log";
+  ofstream MyFile(filename);
   if (!MyFile.is_open())
     cout << "file open is failed" << endl;
   else {
-    cout << "file is opened" << endl;
+    cout << filename << " is opened" << endl;
   }
 
   for (int i = 0; i < numberOfLine; i++) {
