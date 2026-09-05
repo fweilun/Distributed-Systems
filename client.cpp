@@ -13,7 +13,17 @@
 
 #define PORT 8080
 
-int main() {
+int main(int argc, char** argv) {
+  std::string machine_path = REMOTE_MACHINES_PATH;
+  for (int i = 0; i < argc; ++i) {
+    if (strcmp(argv[i], "--local") == 0) {
+      machine_path = LOCAL_MACHINES_PATH;
+    } else {
+      printf("Unknown argument: %s\n", argv[i]);
+      return 1;
+    }
+  }
+
   int listener, server_remain = 0, select_res;
   struct addrinfo hints;
   struct addrinfo* res;
@@ -24,7 +34,7 @@ int main() {
   FD_ZERO(&read_fds);
   FD_ZERO(&master);
 
-  std::vector<machine_config> machine_cfgs = read_all_machine_config();
+  std::vector<machine_config> machine_cfgs = read_all_machine_config(REMOTE_MACHINES_PATH);
   printf("machine count: %zu\n", machine_cfgs.size());
 
   std::string command;

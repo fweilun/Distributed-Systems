@@ -16,18 +16,29 @@
 
 // The users assign a single machine id to this program.
 int main(int argc, char** argv) {
-  int machine_id;
-  std::string machine_path = LOCAL_MACHINES_PATH;
-  for (int i = 0; i < argc; ++i) {
-    if (strcmp(argv[i], "-i")) {
-      machine_id = atoi(argv[i + 1]);
-    } else if (strcmp(argv[i], "--remote")) {
-      machine_path = REMOTE_MACHINES_PATH;
+  int machine_id = -1;
+  std::string machine_path = REMOTE_MACHINES_PATH;
+  for (int i = 1; i < argc; ++i) {
+    if (strcmp(argv[i], "-i") == 0) {
+      if (i + 1 >= argc) {
+        printf("-i requires a machine id\n");
+        return 1;
+      }
+      machine_id = atoi(argv[++i]);
+    } else if (strcmp(argv[i], "--local") == 0) {
+      machine_path = LOCAL_MACHINES_PATH;
+    } else {
+      printf("Unknown argument: %s\n", argv[i]);
+      return 1;
     }
+  }
+  if (machine_id < 0) {
+    printf("Usage: %s -i <machine_id> [--remote]\n", argv[0]);
+    return 1;
   }
 
   // machine_config: returns the id, ip, port for each machine_id
-  struct machine_config cfg = read_machine_config(machine_id);
+  struct machine_config cfg = read_machine_config(machine_id, machine_path);
 
   int sockfd, target_fd, bytes;
   struct addrinfo hints;
@@ -40,7 +51,11 @@ int main(int argc, char** argv) {
   hints.ai_socktype = SOCK_STREAM;
   hints.ai_flags = AI_PASSIVE;
   // NULL + AI_PASSIVE => 分配0.0.0.0:port 內外網來的封包都收
-  getaddrinfo(NULL, cfg.port.c_str(), &hints, &res);
+  int rv = getaddrinfo(NULL, cfg.port.c_str(), &hints, &res);
+  if (rv != 0) {
+    printf("getaddrinfo fails: %d\n", rv);
+    return 1;
+  }
 
   // socket is represented by a file that is fd, stdin:1, ...
   sockfd = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
