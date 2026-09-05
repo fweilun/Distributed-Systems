@@ -16,7 +16,7 @@ all: $(BINS)
 $(BINDIR) $(LOGDIR):
 	mkdir -p $@
 
-$(BINDIR)/machine.o: machine.cpp machine.hpp
+$(BINDIR)/machine.o: machine.cpp machine.hpp | $(BINDIR)
 	$(CXX) $(CXXFLAGS) -c machine.cpp -o $@
 
 $(BINDIR)/server: server.cpp machine.hpp $(BINDIR)/machine.o | $(BINDIR)
