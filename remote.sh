@@ -41,19 +41,11 @@ stop() {
     $SSH cs425-$h "pkill -f 'bins/server' || true"
     echo "[stop] $h"
   done
-}
-
-status() {
-  for h in $HOSTS; do
-    printf "%s: " "$h"
-    $SSH cs425-$h "pgrep -fc 'bins/server' || echo 0"
-  done
-}
+}e
 
 case "${1:-}" in
   deploy)  deploy ;;
   start)   start ;;
   stop)    stop ;;
-  status)  status ;;
-  *) echo "usage: $0 {deploy|start|stop|status|collect}"; exit 1 ;;
+  *) echo "usage: $0 {deploy|start|stop}"; exit 1 ;;
 esac
