@@ -6,8 +6,8 @@ struct machine_config {
   std::string ip;
   std::string port;
 };
-const std::string LOCAL_MACHINES_PATH = "machines.txt";
-const std::string REMOTE_MACHINES_PATH = "machines-remote.txt";
+const std::string LOCAL_MACHINES_PATH = "config/machines.txt";
+const std::string REMOTE_MACHINES_PATH = "config/machines-remote.txt";
 
 std::vector<machine_config> read_all_machine_config(const std::string &path);
 
