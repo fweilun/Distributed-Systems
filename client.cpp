@@ -24,6 +24,7 @@ int main(int argc, char **argv) {
       return 1;
     }
   }
+  Metrics::init("client", -1);
 
   int listener, server_remain = 0, select_res;
   struct addrinfo hints;

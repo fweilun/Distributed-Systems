@@ -13,7 +13,7 @@ void set_enabled(bool on);
 
 void record(const char *name, int64_t value_us, const std::string &extra = "");
 
-void resolve_request(std::string& req, bool drop);
+void resolve_request(std::string &req, bool drop);
 
 struct Timer {
   explicit Timer(const char *n, std::string e = "")

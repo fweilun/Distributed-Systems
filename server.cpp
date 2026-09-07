@@ -38,6 +38,7 @@ int main(int argc, char **argv) {
     printf("Usage: %s -i <machine_id> [--remote]\n", argv[0]);
     return 1;
   }
+  Metrics::init("server", machine_id);
 
   // machine_config: returns the id, ip, port for each machine_id
   struct machine_config cfg = read_machine_config(machine_id, machine_path);
@@ -81,7 +82,8 @@ int main(int argc, char **argv) {
     memset(command, 0, sizeof(command));
     char buffer[65536];
     int n = recv(target_fd, command, 1023, 0);
-    if (n <= 0) { }
+    if (n <= 0) {
+    }
     command[n] = '\0';
     std::string req(command, n);
     Metrics::resolve_request(req, true);

@@ -24,14 +24,15 @@ struct Log_Query {
 
 void loadMachineIps(string filename) {
   ifstream file(filename);
-  if (! file.is_open()) {
+  if (!file.is_open()) {
     cerr << "Error: Cannot open " << filename << endl;
     exit(1);
   }
 
   string ip;
-  while(file >> ip) {
-    while (!ip.empty() && (ip.back() == '\r' || ip.back() == ' ' || ip.back() == '\n')) {
+  while (file >> ip) {
+    while (!ip.empty() &&
+           (ip.back() == '\r' || ip.back() == ' ' || ip.back() == '\n')) {
       ip.pop_back();
     }
     if (!ip.empty()) {
@@ -58,7 +59,7 @@ void envSetup() {
   // generate log file from local
   for (int i = 1; i <= NUM_OF_MACHINE; i++) {
     string path = "./bins/LogGenerator " + to_string(i);
-    const char* command = path.c_str();
+    const char *command = path.c_str();
     int result = system(command);
     if (result == 0)
       cout << "file" << to_string(i) << " is generated." << endl;
@@ -109,23 +110,24 @@ int main() {
   loadMachineIps("config/machines.txt");
   envSetup();
 
-  string PATTERN[5] = {"FATAL_CORE_DUMP_CORRUPT_BUFFER_9999", "USER_SESSION_ERR_AUTH_CODE_[0-9]{4}",
-                       "DATABASE_TRANSACTION_TIMEOUT_WARN", "HTTP_REQUEST_GET_INDEX_SUCCESS_200",  ""};
-  string expected[5] = {"1\n", "0\n", "150\n", "100\n",
-                        "3000\n"};  // 1 for machine 7 used for rare pattern test only appear on
-                                    // one machine, 0 for other machine with rare pattern
+  string PATTERN[5] = {"FATAL_CORE_DUMP_CORRUPT_BUFFER_9999",
+                       "USER_SESSION_ERR_AUTH_CODE_[0-9]{4}",
+                       "DATABASE_TRANSACTION_TIMEOUT_WARN",
+                       "HTTP_REQUEST_GET_INDEX_SUCCESS_200", ""};
+  string expected[5] = {
+      "1\n", "0\n", "150\n", "100\n",
+      "3000\n"}; // 1 for machine 7 used for rare pattern test only appear on
+                 // one machine, 0 for other machine with rare pattern
 
   vector<Log_Query> results(NUM_OF_MACHINE);
 
   string filename = "test_result.txt";
   ofstream file(filename);
-  if (! file.is_open()) {
+  if (!file.is_open()) {
     cerr << "Error: Cannot open " << filename << endl;
     exit(1);
   }
-  
 
-  
   for (int num = 0; num < 6; num++) {
     vector<thread> threads;
     for (int i = 0; i < NUM_OF_MACHINE; i++) {
@@ -142,8 +144,10 @@ int main() {
         command = "grep '20' " + log_file;
       else if (num == 5) {
         command = "grep -c '" + PATTERN[3] + "' " + log_file;
-        if (i == 3 || i == 8) command = command + " | ./remote.sh stop " + to_string(i) + " >/dev/null 2>&1";
-      } 
+        if (i == 3 || i == 8)
+          command = command + " | ./remote.sh stop " + to_string(i) +
+                    " >/dev/null 2>&1";
+      }
 
       threads.emplace_back(worker_task, i, command, ref(results));
     }
@@ -156,8 +160,8 @@ int main() {
     bool is_passed = true;
     cout << "Evaluating result " << num + 1 << "..." << endl;
 
-    for (const auto& res : results) {
-      if (num == 0) {// test for rare patterns
+    for (const auto &res : results) {
+      if (num == 0) { // test for rare patterns
         if ((res.machine_id == 6 && res.content != expected[0]) ||
             (res.machine_id != 6 && res.content != expected[1])) {
           is_passed = false;
@@ -175,10 +179,11 @@ int main() {
         file << "Machine " << res.machine_id << ":" << res.content << endl;
 
       } else if (num == 2) { // test for somehow frequent patterns
-        if (((res.machine_id == 2 || res.machine_id == 7 || res.machine_id == 8) &&
+        if (((res.machine_id == 2 || res.machine_id == 7 ||
+              res.machine_id == 8) &&
              res.content != expected[3]) ||
-            (res.machine_id != 2 && res.machine_id != 7 && res.machine_id != 8 &&
-             res.content != expected[1])) {
+            (res.machine_id != 2 && res.machine_id != 7 &&
+             res.machine_id != 8 && res.content != expected[1])) {
           is_passed = false;
           break;
         }
@@ -192,36 +197,36 @@ int main() {
         }
 
         file << "Machine " << res.machine_id << ":" << res.content << endl;
-        
+
       } else if (num == 4) { // test for large output (>65536 chars)
-        cout << "-----------------Below are outputs of machine " << res.machine_id
-             << "----------------------" << res.content << endl;
+        cout << "-----------------Below are outputs of machine "
+             << res.machine_id << "----------------------" << res.content
+             << endl;
       } else if (num == 5) { // test for frequent patterns with fault-tolerance
         if ((res.machine_id == 3 || res.machine_id == 8) && res.content != "") {
           is_passed = false;
 
           break;
-        } else if (res.machine_id != 3 && res.machine_id != 8 && res.content != expected[4]) {
+        } else if (res.machine_id != 3 && res.machine_id != 8 &&
+                   res.content != expected[4]) {
           is_passed = false;
 
           break;
         }
 
         file << "Machine " << res.machine_id << ":" << res.content << endl;
-
-      } 
+      }
     }
 
     if (is_passed) {
       file << "Test " << num + 1 << " is passed." << endl << endl;
-    } 
-    else {
+    } else {
       file << "Test " << num + 1 << " is not passed." << endl;
-      for (const auto& res : results) {
-        file << "[DEBUG] Machine " << res.machine_id << " returned:\n" << res.content << endl;
+      for (const auto &res : results) {
+        file << "[DEBUG] Machine " << res.machine_id << " returned:\n"
+             << res.content << endl;
       }
     }
-    
   }
 
   file.close();
