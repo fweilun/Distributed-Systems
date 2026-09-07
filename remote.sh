@@ -11,12 +11,11 @@ SCP="scp -o BatchMode=yes -o ConnectTimeout=5"
 
 
 deploy() {
-  for h in $HOSTS; do
+  for h in "${HOSTS[@]}"; do
     (
       $SSH fa26-cs425-${h}.cs.illinois.edu "
         if [ -d $DIR/.git ]; then
-          cd $DIR 
-          # && git fetch origin && git reset --hard origin/main
+          cd $DIR && git fetch origin main && git reset --hard origin/main
         else
           git clone $REPO $DIR && cd $DIR
         fi
@@ -30,7 +29,7 @@ deploy() {
 # used for unit test, delete if need
 push_logs() {
   id=1
-  for h in $HOSTS; do
+  for h in "${HOSTS[@]}"; do
     local_file="./logs/machine.${id}.log"
     if [ ! -f "$local_file" ]; then
       echo "[ERROR] $local_file not found locally!"
