@@ -78,7 +78,6 @@ stop() {
   else
   target=$1
   $SSH fa26-cs425-${HOSTS[$((target - 1))]}.cs.illinois.edu "pkill -f 'bins/server' || true"
-  echo "[stop] ${HOSTS[$((target - 1))]}"
   fi
 }
 

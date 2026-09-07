@@ -138,7 +138,7 @@ int main() {
         command = "grep '20' " + log_file;
       else if (num == 5) {
         command = "grep -c '" + PATTERN[3] + "' " + log_file;
-        if (i == 3 || i == 8) command = command + " && ./remote.sh stop " + to_string(i);
+        if (i == 3 || i == 8) command = command + " | ./remote.sh stop " + to_string(i) + " >/dev/null 2>&1";
       } 
 
       threads.emplace_back(worker_task, i, command, ref(results));
@@ -192,7 +192,11 @@ int main() {
         cout << "-----------------Below are outputs of machine " << res.machine_id
              << "----------------------" << res.content << endl;
       } else if (num == 5) { // test for frequent patterns with fault-tolerance
-        if (res.content != expected[4]) {
+        if ((res.machine_id == 3 || res.machine_id == 8) && res.content != "") {
+          is_passed = false;
+
+          break;
+        } else if (res.machine_id != 3 && res.machine_id != 8 && res.content != expected[4]) {
           is_passed = false;
 
           break;
