@@ -4,7 +4,7 @@ set -u
 
 REPO=https://github.com/fweilun/Distributed-Systems.git
 DIR=Distributed-Systems
-HOSTS=$(seq 4201 4210)
+HOSTS=($(seq 4201 4210))
 DOMAIN="fa26-cs425"
 SSH="ssh -n -o BatchMode=yes -o ConnectTimeout=5"
 SCP="scp -o BatchMode=yes -o ConnectTimeout=5"
@@ -49,32 +49,43 @@ push_logs() {
   wait
 }
 
-
-
 start() {
+  if [ -z "${1:-}" ]; then
   id=1
-  for h in $HOSTS; do
+  for h in "${HOSTS[@]}"; do
     (
-      $SSH fa26-cs425-${h}.cs.illinois.edu "{ cd $DIR && ./bins/server -i $id; } >/dev/null 2>&1 </dev/null &" \
+      $SSH fa26-cs425-${h}.cs.illinois.edu "{ cd $DIR && nohup ./bins/server -i $id; } >/dev/null 2>&1 </dev/null &" \
         && echo "[start] $h id=$id" || echo "[FAIL] $h"
     ) &
     id=$((id+1))
   done
+  else
+  target=$1
+  $SSH fa26-cs425-${HOSTS[$((target - 1))]}.cs.illinois.edu "{ cd $DIR && nohup ./bins/server -i $target; } >/dev/null 2>&1 </dev/null &" \
+        && echo "[start] ${HOSTS[$((target - 1))]} id=$target" || echo "[FAIL] $target"
+  fi
   wait
 }
 
 
 stop() {
-  for h in $HOSTS; do
+  if [ -z "${1:-}" ]; then
+  id=1
+  for h in "${HOSTS[@]}"; do
     $SSH fa26-cs425-${h}.cs.illinois.edu "pkill -f 'bins/server' || true"
     echo "[stop] $h"
   done
+  else
+  target=$1
+  $SSH fa26-cs425-${HOSTS[$((target - 1))]}.cs.illinois.edu "pkill -f 'bins/server' || true"
+  echo "[stop] ${HOSTS[$((target - 1))]}"
+  fi
 }
 
 case "${1:-}" in
   deploy)    deploy ;;
-  start)     start ;;
-  stop)      stop ;;
+  start)     start "${2:-}" ;;
+  stop)      stop "${2:-}";;
   push_logs) push_logs;;
   *) echo "usage: $0 {deploy|start|stop|push_logs}"; exit 1 ;;
 esac
