@@ -15,7 +15,8 @@ deploy() {
     (
       $SSH fa26-cs425-${h}.cs.illinois.edu "
         if [ -d $DIR/.git ]; then
-          cd $DIR && git fetch origin && git reset --hard origin/main
+          cd $DIR 
+          # && git fetch origin && git reset --hard origin/main
         else
           git clone $REPO $DIR && cd $DIR
         fi

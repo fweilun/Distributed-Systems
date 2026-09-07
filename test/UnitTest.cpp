@@ -57,10 +57,11 @@ void envSetup() {
   system("mkdir -p ./logs");
   // generate log file from local
   for (int i = 1; i <= NUM_OF_MACHINE; i++) {
-    string path = "./bin/LogGenerator " + to_string(i);
+    string path = "./bins/LogGenerator " + to_string(i);
     const char* command = path.c_str();
     int result = system(command);
-    if (result == 0) cout << "file" << to_string(i) << " is generated." << endl;
+    if (result == 0)
+      cout << "file" << to_string(i) << " is generated." << endl;
   }
   system("./remote.sh push_logs");
   system("./remote.sh start");
@@ -80,16 +81,19 @@ Log_Query receivedData(int socket_fd, int machine_id) {
   return result;
 }
 
-void worker_task(int machine_id, const string& query_pattern, vector<Log_Query>& results) {
+void worker_task(int machine_id, const string &query_pattern,
+                 vector<Log_Query> &results) {
   int sock = socket(AF_INET, SOCK_STREAM, 0);
-  if (sock < 0) return;
+  if (sock < 0)
+    return;
 
   sockaddr_in server_addr{};
   server_addr.sin_family = AF_INET;
   server_addr.sin_port = htons(SERVER_PORT);
   inet_pton(AF_INET, MACHINE_IPS[machine_id].c_str(), &server_addr.sin_addr);
 
-  if (connect(sock, (struct sockaddr*)&server_addr, sizeof(server_addr)) == 0) {
+  if (connect(sock, (struct sockaddr *)&server_addr, sizeof(server_addr)) ==
+      0) {
     string request = query_pattern + "\n";
     send(sock, request.c_str(), request.size(), 0);
     results[machine_id] = receivedData(sock, machine_id);
@@ -102,7 +106,7 @@ void worker_task(int machine_id, const string& query_pattern, vector<Log_Query>&
 }
 
 int main() {
-  loadMachineIps("machines.txt");
+  loadMachineIps("config/machines.txt");
   envSetup();
 
   string PATTERN[5] = {"FATAL_CORE_DUMP_CORRUPT_BUFFER_9999", "USER_SESSION_ERR_AUTH_CODE_[0-9]{4}",
@@ -144,8 +148,9 @@ int main() {
       threads.emplace_back(worker_task, i, command, ref(results));
     }
 
-    for (auto& t : threads) {
-      if (t.joinable()) t.join();
+    for (auto &t : threads) {
+      if (t.joinable())
+        t.join();
     }
 
     bool is_passed = true;

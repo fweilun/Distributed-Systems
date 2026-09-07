@@ -9,7 +9,7 @@ LOGDIR  = logs
 
 BINS = $(BINDIR)/server $(BINDIR)/client \
        $(BINDIR)/LogGenerator $(BINDIR)/UnitTest
-OBJS = $(BINDIR)/machine.o
+OBJS = $(BINDIR)/machine.o $(BINDIR)/metrics.o
 
 all: $(BINS)
 
@@ -19,11 +19,14 @@ $(BINDIR) $(LOGDIR):
 $(BINDIR)/machine.o: machine.cpp machine.hpp | $(BINDIR)
 	$(CXX) $(CXXFLAGS) -c machine.cpp -o $@
 
-$(BINDIR)/server: server.cpp machine.hpp $(BINDIR)/machine.o | $(BINDIR)
-	$(CXX) $(CXXFLAGS) server.cpp $(BINDIR)/machine.o -o $@
+$(BINDIR)/metrics.o: metrics.cpp metrics.hpp | $(BINDIR)
+	$(CXX) $(CXXFLAGS) -c metrics.cpp -o $@
 
-$(BINDIR)/client: client.cpp machine.hpp $(BINDIR)/machine.o | $(BINDIR)
-	$(CXX) $(CXXFLAGS) client.cpp $(BINDIR)/machine.o -o $@
+$(BINDIR)/server: server.cpp machine.hpp metrics.hpp $(OBJS) | $(BINDIR)
+	$(CXX) $(CXXFLAGS) server.cpp $(OBJS) -o $@
+
+$(BINDIR)/client: client.cpp machine.hpp metrics.hpp $(OBJS) | $(BINDIR)
+	$(CXX) $(CXXFLAGS) client.cpp $(OBJS) -o $@
 
 $(BINDIR)/LogGenerator: $(TESTDIR)/LogGenerator.cpp | $(BINDIR)
 	$(CXX) $(CXXFLAGS) $< -o $@
