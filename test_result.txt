@@ -1,0 +1,307 @@
+Test 1 is not passed.
+[DEBUG] Machine 0 returned:
+
+[DEBUG] Machine 1 returned:
+
+[DEBUG] Machine 2 returned:
+
+[DEBUG] Machine 3 returned:
+
+[DEBUG] Machine 4 returned:
+
+[DEBUG] Machine 5 returned:
+
+[DEBUG] Machine 6 returned:
+
+[DEBUG] Machine 7 returned:
+
+[DEBUG] Machine 8 returned:
+
+[DEBUG] Machine 9 returned:
+
+[DEBUG] Machine 10 returned:
+
+[DEBUG] Machine 11 returned:
+
+[DEBUG] Machine 12 returned:
+
+[DEBUG] Machine 13 returned:
+
+[DEBUG] Machine 14 returned:
+
+[DEBUG] Machine 15 returned:
+
+[DEBUG] Machine 16 returned:
+
+[DEBUG] Machine 17 returned:
+
+[DEBUG] Machine 18 returned:
+
+[DEBUG] Machine 19 returned:
+
+[DEBUG] Machine 20 returned:
+
+[DEBUG] Machine 21 returned:
+
+[DEBUG] Machine 22 returned:
+
+[DEBUG] Machine 23 returned:
+
+[DEBUG] Machine 24 returned:
+
+[DEBUG] Machine 25 returned:
+
+[DEBUG] Machine 26 returned:
+
+[DEBUG] Machine 27 returned:
+
+[DEBUG] Machine 28 returned:
+
+[DEBUG] Machine 29 returned:
+
+Test 2 is not passed.
+[DEBUG] Machine 0 returned:
+
+[DEBUG] Machine 1 returned:
+
+[DEBUG] Machine 2 returned:
+
+[DEBUG] Machine 3 returned:
+
+[DEBUG] Machine 4 returned:
+
+[DEBUG] Machine 5 returned:
+
+[DEBUG] Machine 6 returned:
+
+[DEBUG] Machine 7 returned:
+
+[DEBUG] Machine 8 returned:
+
+[DEBUG] Machine 9 returned:
+
+[DEBUG] Machine 10 returned:
+
+[DEBUG] Machine 11 returned:
+
+[DEBUG] Machine 12 returned:
+
+[DEBUG] Machine 13 returned:
+
+[DEBUG] Machine 14 returned:
+
+[DEBUG] Machine 15 returned:
+
+[DEBUG] Machine 16 returned:
+
+[DEBUG] Machine 17 returned:
+
+[DEBUG] Machine 18 returned:
+
+[DEBUG] Machine 19 returned:
+
+[DEBUG] Machine 20 returned:
+
+[DEBUG] Machine 21 returned:
+
+[DEBUG] Machine 22 returned:
+
+[DEBUG] Machine 23 returned:
+
+[DEBUG] Machine 24 returned:
+
+[DEBUG] Machine 25 returned:
+
+[DEBUG] Machine 26 returned:
+
+[DEBUG] Machine 27 returned:
+
+[DEBUG] Machine 28 returned:
+
+[DEBUG] Machine 29 returned:
+
+Test 3 is not passed.
+[DEBUG] Machine 0 returned:
+
+[DEBUG] Machine 1 returned:
+
+[DEBUG] Machine 2 returned:
+
+[DEBUG] Machine 3 returned:
+
+[DEBUG] Machine 4 returned:
+
+[DEBUG] Machine 5 returned:
+
+[DEBUG] Machine 6 returned:
+
+[DEBUG] Machine 7 returned:
+
+[DEBUG] Machine 8 returned:
+
+[DEBUG] Machine 9 returned:
+
+[DEBUG] Machine 10 returned:
+
+[DEBUG] Machine 11 returned:
+
+[DEBUG] Machine 12 returned:
+
+[DEBUG] Machine 13 returned:
+
+[DEBUG] Machine 14 returned:
+
+[DEBUG] Machine 15 returned:
+
+[DEBUG] Machine 16 returned:
+
+[DEBUG] Machine 17 returned:
+
+[DEBUG] Machine 18 returned:
+
+[DEBUG] Machine 19 returned:
+
+[DEBUG] Machine 20 returned:
+
+[DEBUG] Machine 21 returned:
+
+[DEBUG] Machine 22 returned:
+
+[DEBUG] Machine 23 returned:
+
+[DEBUG] Machine 24 returned:
+
+[DEBUG] Machine 25 returned:
+
+[DEBUG] Machine 26 returned:
+
+[DEBUG] Machine 27 returned:
+
+[DEBUG] Machine 28 returned:
+
+[DEBUG] Machine 29 returned:
+
+Test 4 is not passed.
+[DEBUG] Machine 0 returned:
+
+[DEBUG] Machine 1 returned:
+
+[DEBUG] Machine 2 returned:
+
+[DEBUG] Machine 3 returned:
+
+[DEBUG] Machine 4 returned:
+
+[DEBUG] Machine 5 returned:
+
+[DEBUG] Machine 6 returned:
+
+[DEBUG] Machine 7 returned:
+
+[DEBUG] Machine 8 returned:
+
+[DEBUG] Machine 9 returned:
+
+[DEBUG] Machine 10 returned:
+
+[DEBUG] Machine 11 returned:
+
+[DEBUG] Machine 12 returned:
+
+[DEBUG] Machine 13 returned:
+
+[DEBUG] Machine 14 returned:
+
+[DEBUG] Machine 15 returned:
+
+[DEBUG] Machine 16 returned:
+
+[DEBUG] Machine 17 returned:
+
+[DEBUG] Machine 18 returned:
+
+[DEBUG] Machine 19 returned:
+
+[DEBUG] Machine 20 returned:
+
+[DEBUG] Machine 21 returned:
+
+[DEBUG] Machine 22 returned:
+
+[DEBUG] Machine 23 returned:
+
+[DEBUG] Machine 24 returned:
+
+[DEBUG] Machine 25 returned:
+
+[DEBUG] Machine 26 returned:
+
+[DEBUG] Machine 27 returned:
+
+[DEBUG] Machine 28 returned:
+
+[DEBUG] Machine 29 returned:
+
+Test 5 is passed.
+
+Test 6 is not passed.
+[DEBUG] Machine 0 returned:
+
+[DEBUG] Machine 1 returned:
+
+[DEBUG] Machine 2 returned:
+
+[DEBUG] Machine 3 returned:
+
+[DEBUG] Machine 4 returned:
+
+[DEBUG] Machine 5 returned:
+
+[DEBUG] Machine 6 returned:
+
+[DEBUG] Machine 7 returned:
+
+[DEBUG] Machine 8 returned:
+
+[DEBUG] Machine 9 returned:
+
+[DEBUG] Machine 10 returned:
+
+[DEBUG] Machine 11 returned:
+
+[DEBUG] Machine 12 returned:
+
+[DEBUG] Machine 13 returned:
+
+[DEBUG] Machine 14 returned:
+
+[DEBUG] Machine 15 returned:
+
+[DEBUG] Machine 16 returned:
+
+[DEBUG] Machine 17 returned:
+
+[DEBUG] Machine 18 returned:
+
+[DEBUG] Machine 19 returned:
+
+[DEBUG] Machine 20 returned:
+
+[DEBUG] Machine 21 returned:
+
+[DEBUG] Machine 22 returned:
+
+[DEBUG] Machine 23 returned:
+
+[DEBUG] Machine 24 returned:
+
+[DEBUG] Machine 25 returned:
+
+[DEBUG] Machine 26 returned:
+
+[DEBUG] Machine 27 returned:
+
+[DEBUG] Machine 28 returned:
+
+[DEBUG] Machine 29 returned:
+

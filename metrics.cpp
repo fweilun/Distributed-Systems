@@ -20,6 +20,15 @@ void Metrics::init(const char *role, int id) {
 
 void Metrics::set_enabled(bool on) { g_enabled = on; }
 
+void Metrics::resolve_request(std::string& req, bool drop) {
+  const std::string prefix = "metrics|";
+  if (req.rfind(prefix, 0) == 0) {
+    if (drop)
+      req = req.substr(prefix.size());
+    Metrics::set_enabled(true);
+  }
+}
+
 void Metrics::record(const char *name, int64_t value_us,
                      const std::string &extra) {
   if (!g_enabled || g_path.empty())

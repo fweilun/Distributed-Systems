@@ -80,9 +80,13 @@ int main(int argc, char **argv) {
     char command[1024];
     memset(command, 0, sizeof(command));
     char buffer[65536];
-    recv(target_fd, command, 1024, 0);
+    int n = recv(target_fd, command, 1023, 0);
+    if (n <= 0) { }
+    command[n] = '\0';
+    std::string req(command, n);
+    Metrics::resolve_request(req, true);
     {
-      Metrics::Timer t("grep_exec");
+      Metrics::Timer t("grep_exec_time");
       long long total = 0;
       FILE *result = popen(command, "r");
       while ((bytes = fread(buffer, 1, sizeof(buffer), result)) > 0) {

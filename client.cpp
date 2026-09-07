@@ -51,6 +51,7 @@ int main(int argc, char **argv) {
   for (char &c : tag)
     if (c == ',')
       c = ';'; // for CSV decoding
+  Metrics::resolve_request(command, false);
   Metrics::Timer full_timer("full", "cmd=" + tag);
 
   for (auto &cfg : machine_cfgs) {
