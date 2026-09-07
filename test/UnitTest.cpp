@@ -95,7 +95,6 @@ void worker_task(int machine_id, const string& query_pattern, vector<Log_Query>&
     results[machine_id] = receivedData(sock, machine_id);
   } else {
     perror((MACHINE_IPS[machine_id] + " failed").c_str());
-    // 確保即使失敗，物件也是合法且乾淨的空字串
     results[machine_id] = Log_Query{machine_id, ""};
   }
 
@@ -122,19 +121,25 @@ int main() {
   }
   
 
-  // test1: test for rare patterns
-  for (int num = 0; num < 5; num++) {
+  
+  for (int num = 0; num < 6; num++) {
     vector<thread> threads;
     for (int i = 0; i < NUM_OF_MACHINE; i++) {
       int machine_id = i + 1;
       string log_file = "./logs/machine." + to_string(machine_id) + ".log";
       string command;
-      if (num == 1)
+      if (num == 0)
+        command = "grep -c '" + PATTERN[num] + "' " + log_file;
+      else if (num == 1)
         command = "grep -c -E '" + PATTERN[num] + "' " + log_file;
+      else if (num == 2 || num == 3)
+        command = "grep -c '" + PATTERN[num] + "' " + log_file;
       else if (num == 4)
         command = "grep '20' " + log_file;
-      else
-        command = "grep -c '" + PATTERN[num] + "' " + log_file;
+      else if (num == 5) {
+        command = "grep -c '" + PATTERN[3] + "' " + log_file;
+        if (i == 3 || i == 8) command = command + " && ./remote.sh stop " + to_string(i);
+      } 
 
       threads.emplace_back(worker_task, i, command, ref(results));
     }
@@ -144,22 +149,27 @@ int main() {
     }
 
     bool is_passed = true;
-    cout << "Evaluating result..." << endl;
+    cout << "Evaluating result " << num + 1 << "..." << endl;
 
     for (const auto& res : results) {
-      if (num == 0) {
+      if (num == 0) {// test for rare patterns
         if ((res.machine_id == 6 && res.content != expected[0]) ||
             (res.machine_id != 6 && res.content != expected[1])) {
           is_passed = false;
           break;
         }
-      } else if (num == 1) {
+
+        file << "Machine " << res.machine_id << ":" << res.content << endl;
+
+      } else if (num == 1) { // test for regex grep
         if (res.content != expected[2]) {
           is_passed = false;
           break;
         }
 
-      } else if (num == 2) {
+        file << "Machine " << res.machine_id << ":" << res.content << endl;
+
+      } else if (num == 2) { // test for somehow frequent patterns
         if (((res.machine_id == 2 || res.machine_id == 7 || res.machine_id == 8) &&
              res.content != expected[3]) ||
             (res.machine_id != 2 && res.machine_id != 7 && res.machine_id != 8 &&
@@ -167,24 +177,39 @@ int main() {
           is_passed = false;
           break;
         }
-      } else if (num == 3) {
+
+        file << "Machine " << res.machine_id << ":" << res.content << endl;
+
+      } else if (num == 3) { // test for frequent patterns
         if (res.content != expected[4]) {
           is_passed = false;
           break;
         }
-      } else if (num == 4) {
+
+        file << "Machine " << res.machine_id << ":" << res.content << endl;
+        
+      } else if (num == 4) { // test for large output (>65536 chars)
         cout << "-----------------Below are outputs of machine " << res.machine_id
              << "----------------------" << res.content << endl;
-      }
+      } else if (num == 5) { // test for frequent patterns with fault-tolerance
+        if (res.content != expected[4]) {
+          is_passed = false;
+
+          break;
+        }
+
+        file << "Machine " << res.machine_id << ":" << res.content << endl;
+
+      } 
     }
 
     if (is_passed) {
-      file << "Test " << num + 1 << " is passed." << endl;
+      file << "Test " << num + 1 << " is passed." << endl << endl;
     } 
     else {
       file << "Test " << num + 1 << " is not passed." << endl;
       for (const auto& res : results) {
-        file << "[DEBUG] Machine " << res.machine_id << " returned: [" << res.content << "]" << endl;
+        file << "[DEBUG] Machine " << res.machine_id << " returned:\n" << res.content << endl;
       }
     }
     
