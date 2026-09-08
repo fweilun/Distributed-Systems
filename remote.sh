@@ -6,7 +6,7 @@ REPO=https://github.com/fweilun/Distributed-Systems.git
 DIR=Distributed-Systems
 HOSTS=($(seq 4201 4210))
 DOMAIN="fa26-cs425"
-SSH="ssh -n -o BatchMode=yes -o ConnectTimeout=5"
+SSH="ssh -n -o BatchMode=yes -o ConnectTimeout=5 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR"
 SCP="scp -o BatchMode=yes -o ConnectTimeout=5"
 USER="yuhsien4"
 
@@ -72,18 +72,15 @@ start() {
 
 stop() {
   if [ -z "${1:-}" ]; then
-  id=1
   for h in "${HOSTS[@]}"; do
     (
-      $SSH fa26-cs425-${h}.cs.illinois.edu "pkill -u $USER -f 'bins/server' || true"
+      $SSH fa26-cs425-${h}.cs.illinois.edu "pkill -9 -u \$USER -x server >/dev/null 2>&1 || true"
       echo "[stop] $h"
     ) &
   done
   else
-  (
     target=$1
-    $SSH fa26-cs425-${HOSTS[$((target - 1))]}.cs.illinois.edu "pkill -u $USER -f 'bins/server' || true"
-  ) &
+    $SSH fa26-cs425-${HOSTS[$((target - 1))]}.cs.illinois.edu "pkill -9 -u \$USER -x server  >/dev/null 2>&1 || true"
   fi
   wait
 }
