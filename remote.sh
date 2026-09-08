@@ -56,14 +56,14 @@ start() {
   id=1
   for h in "${HOSTS[@]}"; do
     (
-      $SSH fa26-cs425-${h}.cs.illinois.edu "{ cd $DIR && nohup ./bins/server -i $id; } >/dev/null 2>&1 </dev/null &" \
+      $SSH fa26-cs425-${h}.cs.illinois.edu "{ cd ~/$DIR && nohup ./bins/server -i $id; } >/dev/null 2>&1 </dev/null &" \
         && echo "[start] $h id=$id" || echo "[FAIL] $h"
     ) &
     id=$((id+1))
   done
   else
   target=$1
-  $SSH fa26-cs425-${HOSTS[$((target - 1))]}.cs.illinois.edu "{ cd $DIR && nohup ./bins/server -i $target; } >/dev/null 2>&1 </dev/null &" \
+  $SSH fa26-cs425-${HOSTS[$((target - 1))]}.cs.illinois.edu "{ cd ~/$DIR && nohup ./bins/server -i $target; } >/dev/null 2>&1 </dev/null &" \
         && echo "[start] ${HOSTS[$((target - 1))]} id=$target" || echo "[FAIL] $target"
   fi
   wait
@@ -85,6 +85,7 @@ stop() {
     $SSH fa26-cs425-${HOSTS[$((target - 1))]}.cs.illinois.edu "pkill -u $USER -f 'bins/server' || true"
   ) &
   fi
+  wait
 }
 
 case "${1:-}" in

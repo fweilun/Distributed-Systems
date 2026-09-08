@@ -1,5 +1,1 @@
-
-killall -9 server 2>/dev/null
-killall -9 client 2>/dev/null
-sleep 0.5
-rm -rf metrics
+for h in $(seq 4201 4210); do   echo "Force stopping $h...";   ssh -o BatchMode=yes -o ConnectTimeout=3 fa26-cs425-${h}.cs.illinois.edu "pkill -9 -u \$USER -x server; pkill -9 -u \$USER -f 'bins/server'; fuser -k 9080/tcp 2>/dev/null || true"; done

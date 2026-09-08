@@ -12,7 +12,7 @@
 #include "machine.hpp"
 #include "metrics.hpp"
 
-#define PORT 8080
+#define PORT 9080
 #define BACKLOG 20
 
 // The users assign a single machine id to this program.
@@ -54,6 +54,7 @@ int main(int argc, char **argv) {
   hints.ai_socktype = SOCK_STREAM;
   hints.ai_flags = AI_PASSIVE;
   // NULL + AI_PASSIVE => 分配0.0.0.0:port 內外網來的封包都收
+  std::cout << "DEBUG: " << cfg.port << std::endl;
   int rv = getaddrinfo(NULL, cfg.port.c_str(), &hints, &res);
   if (rv != 0) {
     printf("getaddrinfo fails: %d\n", rv);
@@ -83,14 +84,19 @@ int main(int argc, char **argv) {
     char buffer[65536];
     int n = recv(target_fd, command, 1023, 0);
     if (n <= 0) {
+      close(target_fd);
+      continue;
     }
-    command[n] = '\0';
+    // command[n] = '\0';
     std::string req(command, n);
     Metrics::resolve_request(req, true);
     {
       Metrics::Timer t("grep_exec_time");
       long long total = 0;
-      FILE *result = popen(command, "r");
+      while(! req.empty() && (req.back() == '\n' || req.back() == '\r')) req.pop_back();
+      req += " ./logs/machine." + std::to_string(machine_id) + ".log";
+      std::cout << req << std::endl;
+      FILE *result = popen(req.c_str(), "r");
       while ((bytes = fread(buffer, 1, sizeof(buffer), result)) > 0) {
         send(target_fd, buffer, bytes, 0);
         total += bytes;
